@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{%  load urlify%}
+
+{% block head_title%}Perfil | {{ block.super }} {% endblock %}
+
+{% block content %}
+<div class="col-sm-11 col-sm-offset-1 ">
+    <div class="col">
+        <div class="panel-body">
+                      <div class="col-md-4 col-xs-12 col-sm-6 col-lg-4">
+                        {% if not instance.imagen_Perfil %}
+                            <img alt="User Pic" src="https://x1.xingassets.com/assets/frontend_minified/img/users/nobody_m.original.jpg" id="profile-image1" class="img-circle img-responsive"> 
+                        {% else %}
+                            <img src="{{ instance.imagen_Perfil.url }}" class="img-circle img-responsive"/>
+                        {% endif %}
+                        {% if instance.biografia %}
+                            <h4><strong>Biografia</strong></h4> 
+                            <p>{{ instance.biografia }}</p>
+                        {% endif %}
+                      </div>
+                      <div class="col-md-8 col-xs-12 col-sm-6 col-lg-8" >
+                          <div class="container" >
+                              <h2><strong>{{ instance.username }}</strong></h2>
+                              <p>Cargo:  <b> {% if instance.is_superuser %} Superusuario {% endif %}{% if instance.Administrador %} Administrador {% endif %}{% if instance.Egresado %}Usuario {% endif %}</b></p>
+                          </div>
+                           <hr>
+                          <ul class="container details" >
+                            <li><p><span class="glyphicon glyphicon-user one" style="width:50px;"></span>{% if instance.get_full_name %}{{ instance.get_full_name }} {% else %} {{ instance.username }} {% endif %}</p></li>
+                            <li><p><span class="glyphicon glyphicon-envelope one" style="width:50px;"></span>{{ instance.email }}</p></li>
+                            <li><p><span class="glyphicon glyphicon-phone" style="width:50px;"></span>{% if instance.telefono %}{{ instance.telefono }}{% endif %}</p></li>
+                            <li><p><span class="glyphicon glyphicon-globe" style="width:50px;"></span>{% if instance.ciudad %}{{ instance.ciudad }}{% endif %}</p></li>
+                            {% if instance.Egresado %}<li><p><span class="glyphicon glyphicon-hand-right" style="width:50px;"></span>{% if instance.categorias %}{% for category in instance.categorias.all %}{{category.nombre}}{% if not forloop.last %}, {% endif %}{% endfor %} {% endif %}</p></li>{% endif %}
+                          </ul>
+                          <hr>
+                          <div class="col-sm-12 col-xs-12 tital " >{% if instance.fecha_Nacimiento %}Fecha de Nacimiento: {{ instance.fecha_Nacimiento }}{% endif %}</div>
+                          <hr>
+                          <div class="col-sm-12 col-xs-12 tital " >Se unió: {{ instance.date_joined }}</div>
+                      </div> 
+        </div>                  
+    </div>
+</div>
+
+{% endblock %}

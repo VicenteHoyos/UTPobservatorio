@@ -1,0 +1,137 @@
+{% extends 'chat/index.html' %}
+{% load static %}   
+{% block body %}
+{% block head_title %}Follow | {{block.super}}{% endblock %}
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+<div class="row">
+    <div class="col m8 offset-m2">
+        <div class="card darken-1">
+            <div class = "card-panel">	        
+                <div class = "card-panel red lighten-3">		 
+                    <center><span class="card-title"> <strong>Perfil Usuario: </strong> {{user.get_full_name}}</span>
+                    </center>
+                </div>
+                <div class="row m4"> <!-- Note that "m4 l3" was added -->
+                    {% if not user.imagen_Perfil %}
+                        <center> <img alt="User Pic" src="https://x1.xingassets.com/assets/frontend_minified/img/users/nobody_m.original.jpg" id="profile-image1" class="circle responsive-img" width="100" height="100" style="width:25%;"> </center>
+                    {% else %}
+                        <center><img src="{{ user.imagen_Perfil.url }}" class="circle responsive-img" width="100" height="100" style="width:25%;"/></center>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col m5"> <!-- Note that "m4 l3" was added -->
+                    <div class="card-panel tyni blue lighten-5 ">
+                        {% if user.biografia %}
+                        <center><h4><strong>Biografia</strong></h4> 
+                        <p>{{ user.biografia }}</p></center>  
+                        {% endif %}
+                    </div>
+                    <div class="card-panel tyni blue lighten-4 "> 
+                    <Center>{%with fo=user.followers.count%}
+                                <p class="count"> <i class="material-icons" >group</i> Followers <strong><span class="fo">{{fo}}</span></strong></p>
+                            {%endwith%}
+                            {%with fi=user.following.count%}
+                                <p> <i class="material-icons" >people_outline</i> Following <strong>{{fi}}</strong></p>
+                            {%endwith%}
+                            <a class="follow" data-id="{{user.id}}" data-action="{%if request.user in user.followers.all%}un{%endif%}follow" >
+                            <button  class="btn blue darken-1">
+                                Follow / Unfollow
+                            </button></a>
+                    </Center>
+                    </div>
+                </div>
+                <div class="col m7"> <!-- Note that "m8 l9" was added -->
+                    <div class="card-panel blue lighten-5 ">
+                        <ul class="card-container details" >
+                            <li><p><i class="material-icons" >account_circle</i>{% if user.get_full_name %} {{ user.get_full_name }} {% else %} {{ user.username }} {% endif %}</p></li>
+                            <li><p><i class="material-icons" >contact_mail</i> {{ user.email }}</p></li>
+                            <li><p><i class="material-icons" >contact_phone</i>{% if user.telefono %} {{ user.telefono }}{% endif %}</p></li>
+                            <li><p><i class="material-icons" >location_city</i>{% if user.ciudad %} {{ user.ciudad }}{% endif %}</p></li>
+                            {% if user.Egresado %}<li><p><i class="material-icons">thumb_up  </i>{% if user.categorias %}{% for category in user.categorias.all %} {{category.nombre}}{% if not forloop.last %}, {% endif %}{% endfor %} {% endif %}</p></li>{% endif %}
+                        </ul>
+                    </div>
+                    <div class="col-sm-12 col-xs-12 tital " ><i class="material-icons">date_range </i>{% if user.fecha_Nacimiento %} Fecha de Nacimiento: {{ user.fecha_Nacimiento }}{% endif %}</div>
+                    <hr>
+                    <div class="col-sm-12 col-xs-12 tital " ><i class="material-icons">date_range </i> Se unió: {{ user.date_joined }}</div>
+                    <hr/>
+                </div>
+                <br/>
+            </div>
+            <div class="row m12"><br/>
+            <center> 
+                <a class="btn blue darken-1 tolowercase tocapitalize" href="{% url 'portal:inicio' %}">Inicio Observatorio Egresados</a>
+                <a class="btn blue darken-1 tolowercase tocapitalize" href="{{ request.META.HTTP_REFERER }}">Pagina Anterior</a>
+                <a class="btn blue darken-1 tolowercase tocapitalize" href="{% url 'chatter:chats' %}">Ir al Chat</a>
+            </center>
+            </div><br/>  
+
+        </div>
+    </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+<script>
+    // using jQuery
+function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = jQuery.trim(cookies[i]);
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+var csrftoken = getCookie('csrftoken');
+
+function csrfSafeMethod(method) {
+    // these HTTP methods do not require CSRF protection
+    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+}
+$.ajaxSetup({
+    beforeSend: function(xhr, settings) {
+        if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+        }
+    }
+});
+</script>
+
+
+<script>
+    $(document).ready(function(){
+    
+        $('a.follow').click(function(){
+            $.post("{%url 'follow:user_follow'%}",
+                {id: $(this).data('id'),
+                action: $(this).data('action')},
+                function(res){
+                    console.log(res['status']);
+                    if(res['status'] == 'ok'){
+
+                        var previous_action = $('a.follow').data('action');
+                        //cambiando la accion
+                        $('a.follow').data('action',
+                            previous_action == 'follow' ? 'unfollow':'follow');
+                        // cambiar texto del boton
+                        $('a.follow button').text(
+                            previous_action == 'follow' ? 'Unfollow':'Follow');
+                        // actualizamos el numero de seguidores
+                        var previous_followers = parseInt($('.count .fo').text());
+                        $('.count .fo').text(previous_action == 'follow' ? previous_followers + 1 : previous_followers - 1);
+                    }
+                })
+        });
+
+    });
+</script>
+
+{% endblock %}

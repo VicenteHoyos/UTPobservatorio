@@ -1,0 +1,62 @@
+{% load static %}
+<br>
+<br>
+<div class="bg-light border-right" id="sidebar-wrapper" > <!-- id="page-content-wrapper" -->
+    <div class="page-content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-4" id="right">
+                        <div class="panel panel-default ">
+                            <div class="panel-heading">
+                                <h3 class="panel-title"><strong>Opciones</strong></h3>
+                            </div>
+                            <!--User details -->
+                            <div class="bg-light border-right" id="sidebar-wrapper" class="panel-body">
+
+                                {% if not user.is_superuser and request.user.Administrador %}
+                                <a href="{% url 'posts:create' %}" class="list-group-item list-group-item-action bg-light">Crear Noticia</a>
+                                <a href="{% url 'posts:newslistupdate' %}" class="list-group-item list-group-item-action bg-light">Modificar Noticia</a>
+                                <a href="{% url 'posts:list' %}" class="list-group-item list-group-item-action bg-light">Ver Noticias</a>
+                                <a href="{% url 'users:userenableegresado' %}" class="list-group-item list-group-item-action bg-light">Habilitar Cuenta Egresado</a>
+                                <a href="{% url 'users:userlistupdate' %}"class="list-group-item list-group-item-action bg-light" >Modificar Cuenta Egresado</a>
+                                <a href="{% url 'users:userlistdisableegresado' %}"class="list-group-item list-group-item-action bg-light">Deshabilitar Cuenta Egresado</a>
+                                <a href="{% url 'users:userlist' %}" class="list-group-item list-group-item-action bg-light">Buscar Cuenta Egresado</a>
+                                <a href="{% url 'posts:createinteres' %}"class="list-group-item list-group-item-action bg-light">Crear Interes</a>
+                                <a href="{% url 'users:userupdate' %}" class="list-group-item list-group-item-action bg-light">Editar Perfil</a>
+                                <a href="{% url 'auth_password_change' %}" class="list-group-item list-group-item-action bg-light">Modificar Contraseña</a>
+                                {% endif %}
+
+                                {% if  user.is_superuser %}
+                                <a href="{% url 'portal:inviteadmin' %}" class="list-group-item list-group-item-action bg-light">Invitar Administrador</a>
+                                <a href="{% url 'users:userenableadmin' %}" class="list-group-item list-group-item-action bg-light">Habilitar Cuenta Administrador</a>
+                                <a href="{% url 'users:userlistupdate' %}" class="list-group-item list-group-item-action bg-light">Modificar Cuenta Administrador</a>
+                                <a href="{% url 'users:userlistdisableadmin' %}" class="list-group-item list-group-item-action bg-light">Deshabilitar Cuenta Administrador</a>
+                                <a href="{% url 'users:userlist' %}" class="list-group-item list-group-item-action bg-light">Buscar Cuenta Administrador</a>
+                                <a href="{% url 'users:userupdate' %}" class="list-group-item list-group-item-action bg-light">Editar Perfil</a>
+                                <a href="{% url 'auth_password_change' %}" class="list-group-item list-group-item-action bg-light">Modificar Contraseña</a>
+                                {% endif %}
+
+                                {% if request.user.Egresado and not user.is_superuser and not user.Administrador %}
+                                <a href="{% url 'posts:listnewsegresado' %}" class="list-group-item list-group-item-action bg-light">Ver Noticias</a>
+                                <a href="{% url 'users:userupdateinteres' %}" class="list-group-item list-group-item-action bg-light">Intereses</a>
+                                <a href="{% url 'users:userfindfriend' %}" class="list-group-item list-group-item-action bg-light">Buscar Amigos</a>
+                                <a href="{% url 'users:userupdate' %}" class="list-group-item list-group-item-action bg-light">Editar Perfil</a>
+                                <a href="{% url 'chatter:chats' %}" class="list-group-item list-group-item-action bg-light">Chat</a>
+                                <a href="{% url 'auth_password_change' %}" class="list-group-item list-group-item-action bg-light">Modificar Contraseña</a>
+                                
+                                {% endif %}
+                                
+                            </div>
+                        </div>
+                </div>
+                <div class="col-sm-8" id="left">
+                    <!--All apps -->
+                    <div class="panel panel-default" ng-init="">
+                        <!-- Default panel contents -->
+                        <div class="panel-heading clearfix">
+                            <b><h3 class="panel-title"><strong>Observatorio Egresados UTP </strong></h3>
+                                
+                            </b>
+                         </div>
+                        <div class="panel-body">
+                        <table-here>

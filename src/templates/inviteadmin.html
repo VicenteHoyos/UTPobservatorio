@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block head_title %}Invitar Administrador| {{block.super}}{% endblock %}
+
+{% block content %}
+
+    <div class="col-sm-10 col-sm-offset-1">
+        {% if titulo %}
+        <!-- <h2 class="text-align-center"><strong>{{ titulo }}</strong></h2> -->
+        {% endif %}
+        
+        <form method="POST" action="{% url 'portal:inviteadmin' %}">{% csrf_token %}
+            {{ form_contacto|crispy }}
+            <br/>
+            <p class="text-center"><input class="btn btn-primary" type="submit" value="Invitar"/>
+                <a href="{% url 'portal:inicio' %}" class="btn btn-primary" role="button">Cancelar</a></p>
+            
+        </form>
+    </div>
+
+{% endblock %}

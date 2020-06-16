@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load crispy_forms_tags%}
+{% block head_title %}Registrar | {{block.super}}{% endblock %}
+
+{% block contentOut %}
+<div class="col-sm-6 col-sm-offset-3">
+  <h2><strong><center>Solicitud Registro</center></strong></h2>
+<form method="post" action=".">
+  {% csrf_token %}
+  {{ form | crispy}}
+
+  <input class='btn btn-primary' type="submit" value="{% trans 'Registrarse' %}" />
+</form>
+</div>
+{% endblock %}

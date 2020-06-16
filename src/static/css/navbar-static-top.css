@@ -1,0 +1,19 @@
+body {
+  min-height: 750px;
+}
+
+
+.navbar-static-top {
+  margin-bottom: 5px;
+}
+
+.navbar-default {
+  background-color: #f4f5f5 !important;
+
+  }
+
+  span.footer-link{
+    display:block;
+    float:left;
+    margin:0px 0 0 2px;
+ }

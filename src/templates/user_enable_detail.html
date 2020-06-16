@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block head_title%}Habilitar Cuenta | {{ block.super }} {% endblock %}
+
+{% block content %}
+<div class="col-sm-10 col-sm-offset-1" >
+<!-- <h2><center><strong>Habilitar Cuenta</strong> </center></h2> -->
+    <form method="POST" action="" enctype="multipart/form-data" >{% csrf_token %}
+        <div class="panel panel-info">
+            <div class="panel-heading">Nombre de usuario</div>
+            <div class="panel-body">
+                {{ instance.username }}            
+            </div>
+          </div>
+          <div class="panel panel-info">
+            <div class="panel-heading">Dirección de correo electrónico</div>
+            <div class="panel-body">
+                {{ instance.email }}
+            </div>
+          </div><div class="panel panel-info">
+            <div class="panel-heading">Habilitar Usuario</div>
+            <div class="panel-body">
+                {{ form|crispy }}
+            </div>
+          </div>
+          <br/>
+        <p class="text-center"><input class="btn btn-primary" type="submit" value="Habilitar">
+            <a href="{% url 'portal:inicio' %}" class="btn btn-primary" role="button">Cancelar</a> </p>
+    </form>
+</div>
+{% endblock %}

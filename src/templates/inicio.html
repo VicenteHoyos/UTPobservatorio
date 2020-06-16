@@ -1,0 +1,246 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block head_title %}Bienvenidos | {{ block.super }}{% endblock %}
+
+<style>
+  {% block style %}
+  
+    .jumbotron{
+
+      background-color: #4771e4 !important;
+      color: white !important;
+      border:3px solid #6ea9e4 !important;
+      width:1180px !important;
+
+    }
+
+    .fa-5x {
+      font-size: 6em !important;
+    }
+
+  {% endblock %}
+</style>
+
+{% block jumbotron %}
+<div class="jumbotron">
+  <div class="container">
+    <div class='col'>
+      <div class='col-sm-5'>
+            <h3><strong>Observatorio Egresados UTP</strong></h3>
+            <p><font size="3">Un proyecto que tiene por objetivo construir una aplicativo capaz de conectar a Egresados de la institucion.</font></p>
+            <p>
+              <a class="btn btn-lg btn-primary" href="{% url 'portal:solicitudregistro' %}" role="button">Únete &raquo;</a>
+            </p>
+      </div>
+      <!-- slider -->
+      <div class="col-xs-6 col-sm-offset-1 tamano" >
+        <div id="myCarousel" class="carousel slide" data-ride="carousel">
+          <!-- Indicators -->
+          <ol class="carousel-indicators">
+            <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+            <li data-target="#myCarousel" data-slide-to="1"></li>
+            <li data-target="#myCarousel" data-slide-to="2"></li>
+            <li data-target="#myCarousel" data-slide-to="3"></li>
+            <li data-target="#myCarousel" data-slide-to="4"></li>
+          </ol>
+
+          <!-- Wrapper for slides -->
+          <div class="carousel-inner">
+
+            <div class="item active">
+              <img src="{% static 'img/edificio13.jpg' %}" class="img-responsive"  alt="Los Angeles" style="width:100%;">
+              <div class="carousel-caption">
+              </div>
+            </div>
+
+            <div class="item">
+              <img src="{% static 'img/mediatortaUTP.jpg' %}" class="img-responsive" alt="Chicago" style="width:100%;">
+              <div class="carousel-caption">
+                <!-- <h3>Edifio 10</h3> -->
+                <p><font size="4">EDIFICIO 10 Facultad de Ciencias Ambientales</font></p>
+              </div>
+            </div>
+          
+            <div class="item">
+              <img src="{% static 'img/botanico.jpg' %}" class="img-responsive"alt="New York" style="width:100%;">
+              <div class="carousel-caption">
+                <p>Jardin botanico UTP</p>
+              </div>
+            </div>
+            
+            <div class="item">
+              <img src="{% static 'img/bellasartes.jpg' %}" class="img-responsive"alt="Bellas Artes" style="width:100%;">
+              <div class="carousel-caption">
+                <p><font size="4">EDIFICIO 12 Facultad de Bellas Artes y Humanidades</font></p>
+              </div>
+            </div>
+
+            <div class="item">
+              <img src="{% static 'img/biblioteca.jpg' %}" class="img-responsive" alt="Chicago" style="width:100%;">
+              <div class="carousel-caption">
+                <!-- <h3>Edifio 10</h3> -->
+                <p><font size="4">EDIFICIO 9 Biblioteca y Auditorio Jorge Roa 
+                  Martínez</font></p>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Left and right controls -->
+          <a class="left carousel-control" href="#myCarousel" data-slide="prev">
+            <span class="glyphicon glyphicon-chevron-left"></span>
+            <span class="sr-only">Anterior</span>
+          </a>
+          <a class="right carousel-control" href="#myCarousel" data-slide="next">
+            <span class="glyphicon glyphicon-chevron-right"></span>
+            <span class="sr-only">Siguiente</span>
+          </a>
+        </div>
+    </div>
+      <!-- -------------------- -->
+    </div>
+  </div>
+</div>
+{% endblock %}
+<br/><br/><br/>
+{% if not request.user.is_authenticated %}
+{% block contentInicio %}
+<div class="row">
+  <div class="col-sm-3 col-xs-12 pull-right">
+    {% if not user.is_authenticated %}
+      <center><h2><strong>{{ titulo }}</strong></h2></center>
+          <form method="POST" action="">{% csrf_token %}
+          {{ form_register | crispy }}
+          <input class='btn btn-primary' type='submit' value='Enviar Solicitud' />
+      </form>
+      {% endif %}
+  </div>
+
+
+<div class='col-sm-3 col-xs-12' >
+  <p class="bg-info text-align-center">Escudo Universidad Tecnológica de Pereira</p>
+  <img src='{% static "img/escudo.jpg" %}' class="img-responsive" />
+</div>
+<div class='col-sm-3 col-xs-12'>
+  <p class="bg-info text-align-center">Universidad Tecnologica de Pereira</p>
+  <br/>
+  <img src='{% static "img/logoUTP2.jpg" %}' class="img-responsive" />
+</div>
+<div class='col-sm-3 col-xs-12'>
+  <p class="bg-info text-align-center">Ingeniería de Sistemas y Computación</p><br/>
+  <img src='{% static "img/iscUTP.jpg" %}' class="img-responsive" />
+</div>
+</div>
+{% endblock %}
+{% else %}
+
+{% block content %}
+
+{% include "messages_display.html" %}
+
+{% if messages %}
+<div class="row">    
+  <div class="col-sm-10 col-sm-offset-1"  class="messages">
+    <div class="alert alert-info" role="alert">
+      <h3 class="alert-heading"><center><strong>Mensaje de Información!</strong></center></h3>
+      <hr>
+      <p class="mb-0"> 
+            {% for message in messages %}
+            <h5><center><li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{% if "html_safe" in message.tags %}{{ message|safe }}{% else %}{{ message }} {% endif %}</li></center></h5> 
+          {% endfor %}
+    </p>
+    </div>
+  </div>
+</div>
+{% else %}
+  <div class="col-xs-12  tamano" >
+    <div id="myCarousel" class="carousel slide" data-ride="carousel">
+      <!-- Indicators -->
+      <ol class="carousel-indicators">
+        <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+        <li data-target="#myCarousel" data-slide-to="1"></li>
+        <li data-target="#myCarousel" data-slide-to="2"></li>
+        <li data-target="#myCarousel" data-slide-to="3"></li>
+        <li data-target="#myCarousel" data-slide-to="4"></li>
+        <li data-target="#myCarousel" data-slide-to="5"></li>
+        <li data-target="#myCarousel" data-slide-to="6"></li>
+        <li data-target="#myCarousel" data-slide-to="7"></li>
+        <li data-target="#myCarousel" data-slide-to="8"></li>
+        <li data-target="#myCarousel" data-slide-to="9"></li>
+      </ol>
+
+      <!-- Wrapper for slides -->
+      <div class="carousel-inner">
+        <div class="item active">
+          <img src="{% static 'img/img1.jpg' %}" class="img-responsive"alt="img1" style="width:100%;">
+          <div class="carousel-caption">
+          </div>
+        </div>
+        <div class="item">
+          <img src="{% static 'img/img2.jpg' %}" class="img-responsive"  alt="img2" style="width:100%;">
+          <div class="carousel-caption">
+          </div>
+        </div>
+
+        <div class="item">
+          <img src="{% static 'img/img3.jpg' %}" class="img-responsive"alt="img3" style="width:100%;">
+          <div class="carousel-caption">
+          </div>
+        </div>
+      
+        <div class="item">
+          <img src="{% static 'img/img4.jpg' %}" class="img-responsive"alt="img4" style="width:100%;">
+          <div class="carousel-caption">
+          </div>
+        </div>
+        <div class="item">
+          <img src="{% static 'img/img5.jpg' %}" class="img-responsive"alt="img5" style="width:100%;">
+          <div class="carousel-caption">
+          </div>
+        </div>
+        <div class="item">
+          <img src="{% static 'img/img6.jpg' %}" class="img-responsive"alt="img6" style="width:100%;">
+          <div class="carousel-caption">
+          </div>
+        </div>
+        <div class="item">
+          <img src="{% static 'img/img7.jpg' %}" class="img-responsive"alt="img7" style="width:100%;">
+          <div class="carousel-caption">
+          </div>
+        </div>
+        <div class="item">
+          <img src="{% static 'img/img8.jpg' %}" class="img-responsive"alt="img8" style="width:100%;">
+          <div class="carousel-caption">
+          </div>
+        </div>
+        <div class="item">
+          <img src="{% static 'img/img9.jpg' %}" class="img-responsive"alt="img9" style="width:100%;">
+          <div class="carousel-caption">
+          </div>
+        </div>
+        <div class="item">
+          <img src="{% static 'img/img10.jpg' %}" class="img-responsive"alt="img10" style="width:100%;">
+          <div class="carousel-caption">
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Left and right controls -->
+      <a class="left carousel-control" href="#myCarousel" data-slide="prev">
+        <span class="glyphicon glyphicon-chevron-left"></span>
+        <span class="sr-only">Previous</span>
+      </a>
+      <a class="right carousel-control" href="#myCarousel" data-slide="next">
+        <span class="glyphicon glyphicon-chevron-right"></span>
+        <span class="sr-only">Next</span>
+      </a>
+    </div>
+  </div>
+  {% endif %}
+
+{% endblock %}
+
+{% endif %}

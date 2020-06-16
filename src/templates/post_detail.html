@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{%  load urlify%}
+
+{% block head_title%}{{instance.titulo}} | {{ block.super }} {% endblock %}
+<style>
+    {% block estilo %}
+    h1 {
+        color:red;
+    }
+    {% endblock %}
+</style>
+
+{% block content %}
+<div class="col-sm-10 col-sm-offset-1">
+    {% if instance.imagen %}
+        <img src="{{ instance.imagen.url }}" class="img-responsive"/>
+    {% endif %}
+    <h1>{{ title }} <small>{% if instance.draft %} <span style="color:red;">DRAFT</span>{% endif %} {{ instance.timestamp }}</small></h1><br>
+    {%  if instance.user.get_full_name %}
+        <p><strong> Autor: </strong>  {{ instance.user.get_full_name }}  {% if instance.categorias %}<strong>  Categorias: </strong> {% for category in instance.categorias.all %}{{category.nombre}}{% if not forloop.last %}, {% endif %}{% endfor %} {% endif %}</p>
+    {% else %}
+        <p><strong> Autor: </strong>{{ instance.user }}   {% if instance.categorias %}<strong>  Categorias: </strong> {% for category in instance.categorias.all %}{{category.nombre}}{% if not forloop.last %}, {% endif %}{% endfor %} {% endif %}</p>
+    {% endif %}
+    <!-- {{ request.build_absolute_uri }} -->
+    <br>
+        <!-- {{ share_string}} <br>
+        {{ instance.titulo|urlify }} <br> -->
+        <!-- {{ request.build_absolute_uri }} -->
+        <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri }}">
+        <i class="fa fa-facebook-official fa-2x" aria-hidden="true"></i>
+        </a>
+        <a href="https://twitter.com/home?status={{ share_string }} {{ request.build_absolute_uri }}">
+        <i class="fa fa-twitter-square fa-2x" aria-hidden="true"></i>
+        </a><br> <hr/>
+    {{ instance.contenido }} <hr/><br/>
+    <!-- boton y comentarios de facebook -->
+    <div class="fb-like" data-href="{{ request.build_absolute_uri }}" data-width="" data-layout="standard" data-action="like" data-size="small" data-share="false"></div>
+    <div class="fb-comments" data-href="{{ request.build_absolute_uri }}" data-numposts="5"></div>
+    <br>
+</div>
+{% endblock %}

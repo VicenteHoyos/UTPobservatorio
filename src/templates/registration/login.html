@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load crispy_forms_tags %}
+
+{% block contentOut %}
+{% if not request.user.is_authenticated %}
+<div class="col-sm-6 col-sm-offset-3">
+  <h2><strong>Inicio de sesion</strong></h2>
+<form method="post" action=".">
+  {% csrf_token %} 
+  {{ form | crispy }}
+
+  <input class='btn btn-primary' type="submit" value="{% trans 'Log in' %}" />
+  <input class='btn btn-primary' type="hidden" name="next" value="{{ next }}" />
+</form>
+<br>
+<p>{% trans "¿Se te olvido su contraseña?" %} <a href="{% url 'auth_password_reset' %}">{% trans "Restablézcala" %}</a>!</p>
+<p>{% trans "Aún no te has registrado?" %} <a href="{% url 'portal:solicitudregistro' %}">{% trans "Suscribirse" %}</a>!</p>
+</div>
+{% endif %}
+{% endblock %}

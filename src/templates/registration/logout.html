@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block contentOut %}
+<div class="row">
+    <div class="col-md-10 col-md-offset-1" class="messages">
+        <ul class="messages">
+            <div class="alert alert-info"><center><p><strong>{% trans "Desconectado" %}</strong>, Gracias por pertenecer a Observatorio Egresados</p></center>  </div>
+        <!-- <h2><center><strong>{% trans "Logged out" %}</strong></center></h2>  -->
+       
+        </ul>        
+    </div>
+</div>
+
+{% endblock %}

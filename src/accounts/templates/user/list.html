@@ -1,0 +1,8 @@
+<h1>Lista de usuarios</h1>
+
+{%for u in users%}
+<a href=" {{u.get_absolute_url}}">
+	<img width="100" src="{{u.profile.im.url}}">
+	<h4>{{u.get_full_name}}</h4>
+</a>
+{%endfor%}

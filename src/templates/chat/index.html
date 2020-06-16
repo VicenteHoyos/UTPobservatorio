@@ -1,0 +1,107 @@
+{% load staticfiles %}
+  <!DOCTYPE html>
+  <html>
+    <head>
+      <!--Import Google Icon Font-->
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <!--Import materialize.css-->
+        <link type="text/css" rel="stylesheet" href="{% static 'css/materialize.min.css' %}"  media="screen,projection"/>
+        <link type="text/css" rel="stylesheet" href="{% static 'css/style.css' %}"  media="screen,projection"/>
+
+      <!--Let browser know website is optimized for mobile-->
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+      <!--Import jQuery before materialize.js-->
+        <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+        <script type="text/javascript" src="{% static 'js/materialize.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/chat.js' %}"></script>
+        <title>{% block head_title %}Observatorio Egresados{% endblock %}</title>
+    </head>
+
+    <body background ='{% static "img/fondo.jpg" %}'>
+      <style>    
+        nav ul li a{
+          color: rgb(114, 112, 112) !important;
+        }
+        nav {
+            height: 50px !important;            /* Cambia el valor de lo que quieres */
+            line-height: 50px !important;       /* Cambia el valor de lo que quieres */
+        }
+        .container {
+          margin: 0 auto !important;
+          max-width: 1280px !important;
+          width: 50% !important;
+        }
+        @media only screen and (min-width: 601px) {
+          .container {
+            width: 66% !important;
+          }
+        }
+        @media only screen and (min-width: 993px) {
+          .container {
+            width: 66% !important;
+          }
+        }
+        .tolowercase {
+          text-transform: lowercase;
+      }
+
+      .tocapitalize {
+          text-transform: capitalize;
+      }
+      .material-icons{
+          display: inline-flex;
+          vertical-align: top;
+      }
+        </style>
+        
+    <nav>
+        <div class="nav-wrapper blue-grey lighten-5  ">
+          <a href="" class="brand-logo center"><img class="responsive-img" src="{% static 'img/logoUTP.jpg' %}"></a>
+
+          <div class=" nav-wrapper container">
+            <ul id="nav-mobile" class="left hide-on-med-and-down">
+              <li class="active"><a href="{% url 'portal:inicio' %}">Inicio</a></li>  
+              <li ><a class="waves-effect" href="{% url 'users:userdetail' %}">Ver Perfil</a></li>
+              <li class="active"><a href="{% url 'portal:contact' %}">Contacto</a></li>
+            </ul>
+            <ul id="nav-mobile" class="right hide-on-med-and-down">
+            <li class="active"><a href="{% url 'auth_logout' %}">Cerrar Sesion</a></li>
+          </ul>
+        </div>
+      </div>
+      </nav>
+    {% block body %}
+        
+        <div class="container">
+            <div class="row">
+            <div class="col s8 m8 10 offset-m2 offset-l3">
+                <div class="section center-block">
+                <div>
+                    {% block form %}
+                    
+                    {% endblock %}
+                </div>
+            </div>
+            </div>
+            </div>
+        </div>
+        {% endblock %}
+        {% if request.user.is_authenticated %}
+        <footer class="border-top footer text-muted">
+            <div class="container">
+                <hr/>
+               <center><p style="color:rgb(255, 255, 255)">&copy; 2020 - Observatorio Egresados</p></center>
+            </div>
+        </footer>
+        {% else %}
+        <footer class="border-top footer text-muted">
+          <div class="container">
+              <hr/>
+             <center><p style="color:rgb(3, 1, 36)">&copy; 2020 - Observatorio Egresados</p></center>
+          </div>
+        </footer>
+        {% endif %}
+    </body>
+
+  </html>

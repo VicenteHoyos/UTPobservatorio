@@ -1,0 +1,126 @@
+{% extends "base.html" %}
+    {% block head_title%} Usuarios | {{ block.super }} {% endblock %}
+
+    {% block content %}
+<div class="col-sm-10 col-sm-offset-1">
+    <!-- <h2><strong><center>{{ title }}</center></strong></h2> -->
+    <center>
+    <form method="GET" action="">
+        <input class="text-align-center" type="text" name="q" placeholder="Buscar Usuario" value="{{ request.GET.q }}"/>
+        <input type="submit" value="Buscar" />
+    </form>
+    </center>
+    <!-- {{ objects_list }} <br/> -->
+    <br>
+
+{% if user.is_superuser %}
+    {% for obj in objects_list %}
+        {% if obj.Administrador %}
+                  <div class="col">
+                      
+                    <div class="panel-body">
+                      <div class="col-md-4 col-xs-12 col-sm-6 col-lg-4">
+                        {% if not obj.imagen_Perfil %}
+                            <img alt="User Pic" src="https://x1.xingassets.com/assets/frontend_minified/img/users/nobody_m.original.jpg" id="profile-image1" class="img-circle img-responsive"> 
+                        {% else %}
+                            <img src="{{ obj.imagen_Perfil.url }}" class="img-circle img-responsive"/>
+                        {% endif %}
+                        
+                        {% if obj.biografia %}
+                        <h4><strong>Biografia</strong></h4> 
+                        <p>{{ obj.biografia }}</p>
+                        {% endif %}
+                 
+                      </div>
+                      <div class="col-md-8 col-xs-12 col-sm-6 col-lg-8" >
+                          <div class="container" >
+                            <h2><strong>{{ obj.username }}</strong></h2>
+                            <p>Cargo: <b> {% if obj.is_superuser %} Superusuario {% endif %}{% if obj.Administrador %}Administrador {% endif %}</b></p>
+                          
+                           
+                          </div>
+                           <hr>
+                          <ul class="container details" >
+                            <li><p><span class="glyphicon glyphicon-user one" style="width:50px;"></span>{% if obj.get_full_name %}{{ obj.get_full_name }} {% else %}{{ obj.username }} {% endif %}</p></li>
+                            <li><p><span class="glyphicon glyphicon-envelope one" style="width:50px;"></span>{{ obj.email }}</p></li>
+                            {% if obj.telefono %}<li><p><span class="glyphicon glyphicon-phone" style="width:50px;"></span>{{ obj.telefono }}</p></li>{% endif %}
+                            {% if obj.ciudad %}<li><p><span class="glyphicon glyphicon-globe" style="width:50px;"></span>{{ obj.ciudad }}</p></li>{% endif %}
+                          </ul>
+                          <hr>
+                          <div class="col-sm-12 col-xs-12 tital " >{% if obj.fecha_Nacimiento %}Fecha de Nacimiento: {{ obj.fecha_Nacimiento }}{% endif %}</div>
+                          <hr>
+                          <div class="col-sm-12 col-xs-12 tital " >Se unió: {{ obj.date_joined }}</div>
+                          
+                      </div>
+                    </div>
+                </div>
+        {% endif %}
+    {% endfor %}
+{% endif %}
+{% if user.Administrador %}
+    {% for obj in objects_list %}
+        {% if obj.Egresado %}
+                <div class="col">
+                      
+                    <div class="panel-body">
+                      <div class="col-md-4 col-xs-12 col-sm-6 col-lg-4">
+                        {% if not obj.imagen_Perfil %}
+                            <img alt="User Pic" src="https://x1.xingassets.com/assets/frontend_minified/img/users/nobody_m.original.jpg" id="profile-image1" class="img-circle img-responsive"> 
+                        {% else %}
+                            <img src="{{ obj.imagen_Perfil.url }}" class="img-circle img-responsive"/>
+                        {% endif %}
+                        
+                        {% if obj.biografia %}
+                        <h4><strong>Biografia</strong></h4> 
+                        <p>{{ obj.biografia }}</p>
+                        {% endif %}
+                 
+                      </div>
+                      <div class="col-md-8 col-xs-12 col-sm-6 col-lg-8" >
+                          <div class="container" >
+                            <h2><strong>{{ obj.username }}</strong></h2>
+                            <p>Cargo: <b> {% if obj.is_superuser %} Superusuario {% endif %}{% if obj.Administrador %}Administrador {% endif %}{% if obj.Egresado %}Usuario {% endif %}</b></p>
+                          
+                           
+                          </div>
+                           <hr>
+                          <ul class="container details" >
+                            <li><p><span class="glyphicon glyphicon-user one" style="width:50px;"></span>{% if obj.get_full_name %}{{ obj.get_full_name }} {% else %}{{ obj.username }} {% endif %}</p></li>
+                            <li><p><span class="glyphicon glyphicon-envelope one" style="width:50px;"></span>{{ obj.email }}</p></li>
+                            {% if obj.telefono %}<li><p><span class="glyphicon glyphicon-phone" style="width:50px;"></span>{{ obj.telefono }}</p></li>{% endif %}
+                            {% if obj.ciudad %}<li><p><span class="glyphicon glyphicon-globe" style="width:50px;"></span>{{ obj.ciudad }}</p></li>{% endif %}
+                          </ul>
+                          <hr>
+                          <div class="col-sm-12 col-xs-12 tital " >{% if obj.fecha_Nacimiento %}Fecha de Nacimiento: {{ obj.fecha_Nacimiento }}{% endif %}</div>
+                          <hr>
+                          <div class="col-sm-12 col-xs-12 tital " >Se unió: {{ obj.date_joined }}</div>
+                          
+                      </div>
+                    </div>
+                </div>
+        {% endif %}
+    {% endfor %}
+{% endif %}
+    <div class="pagination">
+        <span class="step-links">
+            {% if objects_list.has_previous %}
+                <a href="?page=1 {% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">&laquo; primero</a>
+                <a href="?page={{ objects_list.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">anterior</a>
+            {% endif %}
+    
+            <span class="current">
+                Usuario {{ objects_list.number }} de {{ objects_list.paginator.num_pages }}
+            </span>
+    
+            {% if objects_list.has_next %}
+                <a href="?page={{ objects_list.next_page_number }} {% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">siguiente</a>
+                <a href="?page={{ objects_list.paginator.num_pages }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">último &raquo;</a>
+            {% endif %}
+        </span>
+    </div>
+</div>
+    {% endblock %}
+
+    <!-- {% url 'posts:detail' id=obj.id %}  familia  App posts vista detail -->    
+    <!-- {{obj.pk}} <br/> -->           
+            
