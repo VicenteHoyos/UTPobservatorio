@@ -10,12 +10,14 @@ import operator
 from operator import and_
 from django.db.models import Q
 from django.core.exceptions import PermissionDenied
+from django.conf import settings
+from django.core.mail import send_mail
 # Create your views here.
 
 from .forms import PostForm ,PostUpdateForm, InteresForm
 from .models import Post, Interes #importo mi modelo
 
-
+from users.models import User
 def post_create(request):
     if not request.user.Administrador :
         print("Bienvenido %s" %(request.user))
@@ -24,7 +26,45 @@ def post_create(request):
 
     if form.is_valid():
         instance = form.save(commit = False)
-        print( form.cleaned_data.get("categorias"))
+        # print( form.cleaned_data.get("categorias"))
+
+        interesesPost =list(form.cleaned_data.get("categorias"))
+        # print (interesesPost)
+        listIntereses = []
+        for i in interesesPost:
+            listIntereses.append(i)
+
+        # print(len(listIntereses))
+
+        usuarios = User.objects.filter(Egresado = True)
+
+        Correos = []
+        for us in usuarios:
+            for i in us.categorias.all():
+                # intereses.append(i.nombre)
+                for j in listIntereses:
+                    # print(i,j)
+                    if i == j:
+                        Correos.append(us.email)
+        
+        CorreosUsers = []
+        for i in  Correos:
+            if i not in CorreosUsers:
+                CorreosUsers.append(i)
+        print(CorreosUsers)
+
+        asunto = 'Nuevo post en Observatorio Egresados'
+        link ='http://localhost:8000/posts/news_list_egresado'
+        email_from = settings.EMAIL_HOST_USER
+        email_to = CorreosUsers
+        email_mensaje = "Hola Egresado: Hay un nuevo post en Observatorio Egresados que te interesa, ingresa al link %s para que puedas ver. Enviado por %s.  " %(link,email_from)
+        send_mail(asunto, 
+            email_mensaje,
+            email_from,
+            email_to,
+            fail_silently=False
+            )
+
         instance.user = request.user
         instance.save()
         # messages.success(request, "tu Noticia ha sido creado con exito")
